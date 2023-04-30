@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Plan">
+
+<!-- 검색 조건 처리 -->
+<sql id="search">
+	<if test="category != null and category != '' and search != null and search != ''">
+		<if test="category == 'all'">
+			AND TP_TITLE LIKE CONCAT('%', #{search}, '%') OR TP_CONTENT LIKE CONCAT('%', #{search}, '%') OR TP_LOCATION LIKE CONCAT('%', #{search}, '%')
+		</if>
+		<if test="category == 'title'">
+			AND TP_TITLE LIKE CONCAT('%', #{search}, '%')
+		</if>
+		<if test="category == 'content'">
+			AND TP_CONTENT LIKE CONCAT('%', #{search}, '%')
+		</if>
+		<if test="category == 'location'">
+			AND TP_LOCATION LIKE CONCAT('%', #{search}, '%')
+		</if>
+	</if>
+</sql>
+
+<!-- 리스트 가져오기 -->
+<select id="getList" parameterType="com.travelez.app.plan.dto.PlanParam" resultType="com.travelez.app.plan.dto.PlanDTO">
+SELECT TP_SEQ, TP_ID, TP_LOCATION, TP_TITLE, TP_LIKECOUNT, TP_WRITEDATE, TP_FILENAME
+FROM ( SELECT ROW_NUMBER()OVER(ORDER BY TP_LIKECOUNT DESC) AS RNUM,
+				TP_SEQ,
+				TP_ID,
+				TP_LOCATION,
+				TP_TITLE,
+				TP_LIKECOUNT,
+				TP_WRITEDATE,
+				TP_FILENAME
+				FROM TRAVEL_PLAN
+				WHERE 1=1
+				<include refid="search" />
+				ORDER BY TP_LIKECOUNT DESC
+			) A
+WHERE RNUM BETWEEN ${start} AND ${end}
+</select>
+
+<!-- 총 게시글 수 -->
+<select id="getPostCount" parameterType="com.travelez.app.plan.dto.PlanParam" resultType="Integer">
+SELECT IFNULL(COUNT(*), 0)
+FROM TRAVEL_PLAN
+WHERE 1=1
+<include refid="search" />
+</select>
+
+<!-- 게시글 상세보기 -->
+<select id="getDetail" parameterType="Integer" resultType="com.travelez.app.plan.dto.PlanDTO">
+SELECT TP_SEQ, TP_ID, TP_LOCATION, TP_TITLE, TP_CONTENT, TP_WRITEDATE
+FROM TRAVEL_PLAN
+WHERE TP_SEQ = ${tpSeq}
+</select>
+
+<!-- 게시글 작성하기-->
+<insert id="planWrite" parameterType="com.travelez.app.plan.dto.PlanDTO">
+INSERT INTO TRAVEL_PLAN(TP_ID, TP_LOCATION, TP_TITLE, TP_CONTENT, TP_FILENAME)
+VALUES(#{tpId}, #{tpLocation}, #{tpTitle}, #{tpContent}, #{tpFileName})
+</insert>
+
+<!-- 게시글 수정하기 -->
+<update id="planUpdate" parameterType="com.travelez.app.plan.dto.PlanDTO">
+UPDATE TRAVEL_PLAN
+SET TP_LOCATION = #{tpLocation}, TP_TITLE = #{tpTitle}, TP_CONTENT = #{tpContent}, TP_FILENAME = #{tpFileName}
+WHERE TP_SEQ = ${tpSeq}
+</update>
+
+<!-- 게시글 삭제하기 -->
+<delete id="planDelete" parameterType="Integer">
+DELETE FROM TRAVEL_PLAN
+WHERE TP_SEQ = ${tpSeq}
+</delete>
+
+<!-- 좋아요 -->
+<!-- 해당 게시글 좋아요 수 -->
+<select id="countLike" parameterType="Integer" resultType="Integer">
+SELECT TP_LIKECOUNT
+FROM TRAVEL_PLAN
+WHERE TP_SEQ=${tpSeq}
+</select> 
+
+
+<!-- 1) 기존에 좋아요를 누른 게시물인지 확인 -->
+<select id="likeCheck" parameterType="com.travelez.app.plan.dto.LikeDTO" resultType="Integer">
+SELECT COUNT(*)
+FROM TP_LIKES
+WHERE TP_SEQ = ${tpSeq} AND TP_ID = #{tpId}
+</select>
+
+<!-- 2) 좋아요 누른 이력이 있으면 좋아요 취소 및 좋아요 갯수 감소 -->
+<update id="minusLike" parameterType="Integer">
+UPDATE TRAVEL_PLAN
+SET TP_LIKECOUNT = TP_LIKECOUNT - 1
+WHERE TP_SEQ = ${tpSeq}
+</update>
+<delete id="likeDel" parameterType="com.travelez.app.plan.dto.LikeDTO">
+DELETE
+FROM TP_LIKES
+WHERE TP_ID = #{tpId} AND TP_SEQ = ${tpSeq}
+</delete>
+
+<!-- 3) 좋아요 누른 이력이 없으면 좋아요 반영 및 갯수 증가 -->
+<insert id="likeUp" parameterType="com.travelez.app.plan.dto.LikeDTO">
+INSERT INTO TP_LIKES
+VALUES(${tpSeq}, #{tpId})
+</insert>
+<update id="plusLike" parameterType="Integer">
+UPDATE TRAVEL_PLAN
+SET TP_LIKECOUNT = TP_LIKECOUNT + 1
+WHERE TP_SEQ = ${tpSeq}
+</update>
+
+
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+
+<!-- 해당 글의 댓글 수 가져오기 -->
+<select id="commentCount" parameterType="Integer" resultType="Integer">
+SELECT COUNT(*)
+FROM TP_COMMENT
+WHERE TP_SEQ = ${tpSeq}
+</select>
+
+<!-- 해당 글의 댓글 리스트 -->
+<select id="commentList" parameterType="Integer" resultType="com.travelez.app.plan.dto.PlanCommentDTO">
+SELECT *
+FROM TP_COMMENT
+WHERE TP_SEQ = ${tpSeq}
+ORDER BY TC_REF DESC, TC_STEP ASC
+</select>
+
+<!-- 댓글 작성 -->
+<insert id="commentWrite">
+INSERT INTO TP_COMMENT(TP_SEQ, TC_REF, TC_ID, TC_CONTENT, TC_WRITEDATE)
+VALUES(${tpSeq},
+				(SELECT IFNULL(MAX(TC_REF),0) +1 FROM TP_COMMENT TC),
+				#{tcId},
+				#{tcContent},
+				NOW());
+</insert>
+
+<!-- 댓글 수정 -->
+<update id="commentModify" parameterType="com.travelez.app.plan.dto.PlanCommentDTO">
+UPDATE TP_COMMENT
+SET TC_CONTENT = #{tcContent}, TC_WRITEDATE = NOW()
+WHERE TC_COMMENTSEQ = ${tcCommentSeq}
+</update>
+
+<!-- 댓글 삭제 -->
+<delete id="commentDelete" parameterType="Integer">
+DELETE
+FROM TP_COMMENT
+WHERE TC_COMMENTSEQ = ${tcCommentSeq}
+</delete>
+
+<!-- 리댓 등록 -->
+<!-- 기존에 리댓이 존재하면 기존 리댓의 STEP값을 업데이트  -->
+<update id="stepUp" parameterType="Integer">
+UPDATE TP_COMMENT
+SET TC_STEP= TC_STEP + 1
+WHERE 1 =1 
+	AND TC_REF = (SELECT TC_REF
+						FROM (SELECT TC_REF
+									FROM TP_COMMENT a
+									WHERE TC_COMMENTSEQ = ${tcCommentSeq}) A)
+	AND TC_STEP > (SELECT TC_STEP
+							FROM (SELECT TC_STEP
+										FROM TP_COMMENT b
+										WHERE TC_COMMENTSEQ = ${tcCommentSeq}) B)
+</update>
+<insert id="replyWrite" parameterType="com.travelez.app.plan.dto.PlanCommentDTO">
+INSERT INTO TP_COMMENT(TP_SEQ, TC_ID, TC_REF, TC_STEP, TC_DEPTH, TC_CONTENT, TC_WRITEDATE)
+VALUES(${tpSeq},
+				#{tcId},
+				(SELECT TC_REF FROM TP_COMMENT A WHERE TC_COMMENTSEQ = ${tcCommentSeq}),
+				(SELECT TC_STEP FROM TP_COMMENT B WHERE TC_COMMENTSEQ = ${tcCommentSeq}) + 1,
+				1,
+				#{tcContent},
+				NOW());
+</insert>				
+</mapper>

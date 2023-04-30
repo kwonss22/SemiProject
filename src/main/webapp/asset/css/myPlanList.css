@@ -1,0 +1,270 @@
+@charset "UTF-8";
+
+#mySchedule::after {
+    content:'';
+    background-color: #64BDEB;
+    width:5px;
+    height:35px;
+    position:absolute;
+    right:0;
+    top:-4px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+/* Myplan */
+.myPlanWrap {
+    margin:70px 0 30px 60px;
+}
+.rightMyPlan {
+	position: relative;
+}
+/* planTitle */
+.planTitle {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-bottom:60px;
+
+}
+.planTitle > h2 {
+    font-size:3em;
+    font-weight: 700;
+    margin-right:20px;
+}
+.planWriteBtn {
+    display: flex;
+    align-items: center;
+    padding: 10px 0 0;
+}
+.planWriteBtn > button {
+    background-color: #fff;
+    margin-right:10px;
+}
+
+/* planWrite */
+#planWrite {
+    position:absolute;
+    left:0;
+    top:75px;
+    padding:30px 30px 20px;
+    border-radius: 30px;
+    box-shadow: 0 0px 20px 0px #ddd;
+    background-color: #fff;;
+}
+/* 여행일정 선택 */
+/* 공통부분 */
+.tripDay > div > label > input,
+.tripDay > div > label > .tripDayCustom  {
+    position:absolute;
+    height: 40px;
+    width:200px;
+}
+
+.planInputBox {
+    width:100%;
+    height:50px;
+    display:flex;
+    justify-content: left;
+    align-items: center;
+
+}
+.planInputBox:nth-child(1) {
+    margin-bottom:20px;
+}
+.planInputBox > span {
+    font-size:0.9em;
+    font-weight: 500;
+    width:80px;
+    display:inline-block;
+    line-height: 1.2;
+}
+.tripDay {
+    display:flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.tripDay > div {
+    position:relative;
+    top:-18px;
+}
+.tripDay > div > label > input {
+    opacity : 0;
+    z-index:20;
+}
+input[type='date']:focus::before,
+input[type='date']:valid::before {
+    display: none;
+}
+input[type='date']::-webkit-calendar-picker-indicator{
+	width: 100%;
+	height:100%;
+}
+.tripDay > div > label > .tripDayCustom {
+    border: 1px solid #000;
+    border-radius: 10px;
+    z-index:10;
+    font-size: 0.8em;
+    padding: 12px 0 0 20px;
+    color:#5e5e5e;
+}
+.tripDay > div > label > .tripDayCustom::after {
+    content:'';
+    background-image: url(../images/calendar.png);
+    width:20px;
+    height:20px;
+    position: absolute;
+    right: 20px;
+    top: 8px;
+    background-size: 20px;
+}
+.tripDay .goTripDay {
+    left:0;
+}
+.tripDay .endTripDay {
+    right:-220px;
+}
+#tePlace {
+    width:200px;
+    height:40px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding:0 20px;
+}
+#tePlace::placeholder {
+    font-size:0.8em;
+}
+#planListWriteBtn {
+    height:40px;
+    width:100px;
+    background-color: #64BDEB;
+    color:#fff;
+    border-radius: 10px;
+    margin-left: 530px;
+}
+#planChange {
+	background-color: #999;
+    font-size: 0.9em;
+    color: #fff;
+    padding: 5px 10px;
+    margin:10px 0 0 100px;
+    border-radius:5px;
+}
+
+/* 여행일정리스트 */
+.planListWrap {
+	position:relative;
+}
+.planList {
+	display:flex;
+	justify-content: left;
+    align-items: center;
+    margin:0 0 30px 30px;
+}
+.planContent, .planListUpdate {
+	width: 500px;
+	margin-right:20px;
+    background-color: #fff;
+    box-shadow: 0 0px 15px 0px #ddd;
+    padding: 20px 30px 30px 30px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: left;
+    flex-flow: column;
+}
+.planContent::before {
+	content:'';
+	width:10px;
+	height:10px;
+	margin-left: -58px;
+	background-color:#FB8B08;
+	border-radius:50%;
+}
+.planListTitle {
+	font-size:1.5em;
+	font-weight:700;
+	margin-bottom:10px;
+}
+.planChangeBtn{
+	display:flex;
+	justify-content: left;
+    align-items: center;
+    flex-flow:column;
+    margin-right:10px;
+}
+.planChangeBtn > a,
+.planChangeBtn > button {
+	text-align: center;
+    width: 50px;
+    height: 30px;
+    background: #64BDEB;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 0.8em;
+}
+.myplanListDelete {
+	background : #ff0000 !important;
+}
+/* 수정입력부분 */
+.planListUpdate {
+	text-align:center;
+	width:600px;
+}
+#planListUpdateForm {
+	display:flex;
+	flex-flow:column;
+}
+#planListUpdateForm > div > input {
+	border: 1px solid #000;
+    border-radius: 10px;
+    height:40px;
+    width:222px;
+    padding: 5px 20px;
+}
+.tripDayUpdate > div {
+	position:relative;
+	width:120px;
+	height:30px;
+}
+.tripDayUpdate > div > label > input,
+.tripDayUpdate > div > label > .dayUpdateCustom {
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:40px;
+	
+}
+.tripDayUpdate > div > label > input {
+	opacity : 0;
+    z-index:20;
+}
+.tripDayUpdate > div > label > .dayUpdateCustom {
+	z-index:10;
+	border: 1px solid #000;
+    border-radius: 10px;
+    font-size:0.9em;
+    line-height:40px;
+    color:#777;
+}
+.tripDayUpdate .and {
+	width:20px;
+	padding-top:10px;
+}
+.endTripDay {
+	margin-left:2px;
+}
+#dayUpdateBtn{
+	position:absolute;
+	right: 50px;
+    bottom : 29px;
+	background-color:#64BDEB;
+	width:80px;
+	height:40px;
+	font-size:0.9em;
+	color:#fff;
+	border-radius:10px;
+}

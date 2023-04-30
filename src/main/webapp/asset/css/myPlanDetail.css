@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+#mySchedule::after {
+    content:'';
+    background-color: #64BDEB;
+    width:5px;
+    height:35px;
+    position:absolute;
+    right:0;
+    top:-4px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.myPlanWrap {
+	margin:70px 0 30px 50px;
+}
+.tripPlanDetail {
+	display:flex;
+	flex-flow: column;
+	margin-bottom:30px;
+}
+.planDetailTitle {
+	font-size:2em;
+	font-weight:700;
+	margin-bottom:10px;
+}
+.myPlanBtn {
+	display:flex;
+	justify-content: left;
+    align-items: center;
+}
+.myPlanBtn > * {
+	width:80px;
+	height:30px;
+	font-size:0.9em;
+	background-color: #999;
+    color:#fff;
+    border-radius:5px;
+    margin-top:20px;
+}
+.myPlanBtn > a {
+	width:100px;
+	text-align:center;
+	line-height:30px;
+	margin-right:10px;
+	background-color: #64BDEB;
+}
+.myPlanDetail {
+	display:flex;
+	justify-content: left;
+    align-items: baseline;
+
+    
+}
+.dateTime {
+	font-weight:600;
+	margin-right:10px;
+	width:130px;
+	font-size:0.8em;
+}
+.planDetail {
+	display:flex;
+    flex-flow:column;
+    width:450px;
+    padding:20px 30px 30px 30px;
+    margin:0 10px 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 0px 15px 0px #ddd;
+    background-color: #fff;;
+}
+.planDetail .detailPlace {
+	font-size:1.1em;
+	font-weight:600;
+	margin-bottom:10px;
+}
+.detailMemo {
+	font-size:0.9em;
+}
+.planChangeBtn{
+	display:flex;
+	justify-content: left;
+    align-items: center;
+    flex-flow:column;
+}
+.planChangeBtn > a {
+	text-align: center;
+    width: 50px;
+    height: 30px;
+    background: #64BDEB;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 0.8em;
+}
+.myplanDelete {
+	background : #ff0000 !important;
+	
+}

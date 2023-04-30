@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+main {
+    width:1000px;
+    margin:0 auto;
+    display:flex;
+}
+/* sideMenu */
+.mypageSideMenu {
+    position:relative;
+    width:300px;
+    border-right:1px solid #ddd;
+    padding:60px 0 20px;
+}
+.userProfile {
+    display:flex;
+    flex-flow: column;
+    align-items: center;
+}
+.userProfile > img {
+    width:150px;
+    height:150px;
+    border-radius: 50%;
+}
+.userProfile > p {
+    margin:20px 0 50px;
+    font-weight: 600;
+    font-size:1.2em;
+}
+.mypageSideMenu > .sideMenu {
+    display: flex;
+    flex-flow: column;
+}
+.mypageSideMenu > .sideMenu > a {
+    position:relative;
+    font-size:1.4em;
+    font-weight: 600;
+    height:50px;
+    background: none;
+    text-align: left;
+}
+
+.unRegi {
+    color:#aaa;
+    font-size:0.8em;
+}
+
+
+

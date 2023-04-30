@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Play">
+
+	<!-- 검색 조건 처리 -->
+	<sql id="search">
+		<if
+			test="choice != null and choice != '' and search != null and search != ''">
+			<if test="choice == 'title'">
+				and p_title like concat('%', #{search} ,'%')
+			</if>
+
+			<if test="choice == 'location'">
+				and p_location like concat('%', #{search} ,'%')
+			</if>
+
+			<if test="choice == 'content'">
+				and p_content like concat('%', #{search} ,'%')
+			</if>
+
+			<if test="choice == 'writer'">
+				and p_id=#{search}
+			</if>
+		</if>
+	</sql>
+
+	<select id="playlist" parameterType="com.travelez.app.play.dto.PlayParam" resultType="com.travelez.app.play.dto.PlayDto">
+		select p_seq, p_id, p_location,
+		p_title, p_content, p_wdate,
+		p_readcount, p_filename,
+		p_newfilename
+		from
+		(select
+		row_number()over(order by p_readcount desc)
+		as rnum,
+		p_seq, p_id,
+		p_location, p_title, p_content, p_wdate,
+		p_readcount,
+		p_filename,
+		p_newfilename
+		from p_bbs
+		where 1=1
+		<include refid="search"></include>
+		order by p_readcount desc
+		) a
+		where rnum between ${start} and ${end}
+	</select>
+
+	<!-- 글의 총수 -->
+	<select id="getAllPlay" parameterType="com.travelez.app.play.dto.PlayParam"
+		resultType="java.lang.Integer">
+		select ifnull(count(*), 0)
+		from p_bbs
+		where 1=1
+		<include refid="search"></include>
+	</select>
+
+	<insert id="writePlay" parameterType="com.travelez.app.play.dto.PlayDto">
+
+		insert into p_bbs(p_id,
+		p_location, p_title, p_content,
+		p_wdate,
+		p_readcount,
+		p_filename,
+		p_newfilename)
+		value(#{pId}, #{pLocation}, #{pTitle},
+		#{pContent},
+		now(), 0, #{pFilename}, #{pNewfilename})
+	</insert>
+
+	<select id="getPlay" parameterType="Integer"
+		resultType="com.travelez.app.play.dto.PlayDto">
+		select *
+		from p_bbs
+		where p_seq = #{pSeq}
+	</select>
+
+	<update id="upReadcount" parameterType="Integer">
+		update p_bbs
+		set
+		p_readcount=p_readcount + 1
+		where
+		p_seq=#{pSeq}
+	</update>
+
+	<update id="updatePlay" parameterType="com.travelez.app.play.dto.PlayDto">
+		update p_bbs
+		set
+		p_location=#{pLocation}, p_title=#{pTitle}, p_content=#{pContent},
+		p_filename=#{pFilename}, p_newfilename=#{pNewfilename},
+		p_wdate=now()
+		where p_seq=#{pSeq}
+	</update>
+
+	<delete id="deletePlay" parameterType="Integer">
+		delete
+		from p_bbs
+		where
+		p_seq=#{pSeq};
+	</delete>
+
+	<insert id="pCommentWrite"
+		parameterType="com.travelez.app.play.dto.PlayComment">
+		insert into p_comment(p_seq, p_id, p_content, p_wdate)
+		value(#{pSeq}, #{pId}, #{pContent}, now())
+	</insert>
+
+	<select id="pCommentList" parameterType="Integer"
+		resultType="com.travelez.app.play.dto.PlayComment">
+		select *
+		from p_comment
+		where
+		p_seq=${pSeq}
+		order by p_wdate
+		desc
+	</select>
+
+	<delete id="deleteComment" parameterType="Integer">
+		delete 
+		from p_comment
+		where 
+		p_answerSeq = #{pAnswerSeq}
+	</delete>
+
+</mapper>
