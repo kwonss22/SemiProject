@@ -21,20 +21,36 @@ pThumbnail.addEventListener('change', function(event){
 	setThumbnail(event)
 });
 
-/* 빈칸에 입력 시 테두리 파랗게 변경 */
+/* 이름 입력 시 테두리 파랗게 변경 */
 inputChk(userName);
 
 /* 비밀번호 입력 후 비밀번호 확인과 일치하는지 확인 */
 userPwd.addEventListener('input', function(){
 	
-	inputOk(userPwd);
-	
-	if(userPwdChk.value !== "" && userPwd.value !== userPwdChk.value){
+	if(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(userPwd.value)){
+		inputOk(userPwd); 
+	} else {
 		inputNg(userPwd);
-	}else {
-		inputOk(userPwd);
 	}
+	// 비밀번호 입력칸은 새로 입력하고 비밀번호 입력 확인칸은 입력되어있을 경우 확인
+	if (userPwdChk.value.length > 0) {
+		if(userPwdChk.value == userPwd.value){
+			inputOk(userPwdChk);	
+		} else {
+			inputNg(userPwdChk);
+		}
+	}
+	
+
 });
+// 비밀번호 다시 입력할 때 입력된게 없을 경우 빨간테두리 제거
+userPwd.addEventListener('keyup', function(){
+	console.log(userPwd.value);
+	if(userPwd.value == "" || userPwd.value < 0){
+		userPwd.classList.remove('inputNg');
+		userPwdChk.classList.remove('inputOk');
+	}
+})
 
 /* 비밀번호 확인 입력시 일치하면 테두리 파랑, 불일치 빨강 */
 userPwdChk.addEventListener('input', function(){
@@ -46,7 +62,7 @@ userPwdChk.addEventListener('input', function(){
 }); /* end of userPwChk input function */
 
 
-/* 이메일 주소에 @가 있는지 확인 */
+/* 이메일 주소 정규식 확인 */
 userEmail.addEventListener('input', function() {
   	if (validateEmail(userEmail.value)) {
   	 	inputOk(userEmail);
@@ -124,7 +140,7 @@ function setThumbnail(event) {
 /* 빈칸채워질 때 컬러변경 함수 */
 function inputChk(userInfo){
 	userInfo.addEventListener('input', function(){
-		if (userInfo.value.length > 0) {
+		if (userInfo.value.length > 1) {
     		inputOk(userInfo);
 		} else {
 			inputNg(userInfo);
@@ -134,8 +150,8 @@ function inputChk(userInfo){
 
 /* 이메일 형식인지 확인 */
 function validateEmail(email){
-	const atPosition = email.indexOf('@');
-	if(atPosition > 0){
+	const atPosition = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
+	if(atPosition.test(email)){
 		return true;
 	} else {
 		return false;

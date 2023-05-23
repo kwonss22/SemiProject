@@ -348,11 +348,14 @@ public class MemberController {
 
 	}
 	@GetMapping(value="myProfile.do")
-	public String myProfile(Model model, String teId) {
+	public String myProfile(Model model, String teId, HttpServletRequest req) {
 		System.out.println("MemberController myProfile" + new Date());
 		
 		MemberDto userInfo = service.userInfo(teId);
 		model.addAttribute("userInfo", userInfo);
+		MemberDto login = service.login(userInfo);
+		
+		req.getSession().setAttribute("login", login);
 		
 		return "member/myProfile";
 	}

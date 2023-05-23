@@ -87,7 +87,7 @@
 	</update>
 	<!-- 회원정보가져오기 -->
 	<select id="userInfo" parameterType="String" resultType="com.travelez.app.member.dto.MemberDto">
-		select te_id, te_name, te_profile, te_profilename, te_name, te_email, te_phonenum, te_birth, te_prefertrip
+		select te_id, te_pwd, te_name, te_profile, te_profilename, te_name, te_email, te_phonenum, te_birth, te_prefertrip
 		from member
 		where te_id=#{teId}
 	</select>

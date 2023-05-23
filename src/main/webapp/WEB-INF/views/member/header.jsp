@@ -1,3 +1,4 @@
+<%@page import="org.apache.ibatis.reflection.SystemMetaObject"%>
 <%@page import="com.travelez.app.member.dto.MemberDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -52,20 +53,20 @@
 
     hBtmDefault()
     
-        document.addEventListener('scroll', function(){
-            if(window.pageYOffset > 100){
-                hBottomBg.style.position = 'fixed'
-                hBtmLogo.style.display = 'block'
-                hBtmRightMenu.style.display = "flex"
-                
-            }else {
-                hBtmDefault()
-            }
-        });
-
-        function hBtmDefault(){
-            hBottomBg.style.position = 'relative'
-            hBtmLogo.style.display = 'none'
-            hBtmRightMenu.style.display = "none"
+    document.addEventListener('scroll', function(){
+        if(window.pageYOffset > 100){
+            hBottomBg.style.position = 'fixed'
+            hBtmLogo.style.display = 'block'
+            hBtmRightMenu.style.display = "flex"
+            
+        }else {
+            hBtmDefault()
         }
+    });
+
+    function hBtmDefault(){
+        hBottomBg.style.position = 'relative'
+        hBtmLogo.style.display = 'none'
+        hBtmRightMenu.style.display = "none"
+    }
 </script>

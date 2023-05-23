@@ -32,14 +32,14 @@
         <div class="userIdWrap">
 	        <div class="userId">
 	            <span>아이디*</span>
-	            <input type="text" name="teId" id="userId" placeholder="아이디를 입력해주세요">
+	            <input type="text" name="teId" id="userId" placeholder="아이디입력(영소문자/숫자 조합 6자리 이상)">
 	            <button type="button" id="idChkBtn">중복확인</button>
 	        </div>  <!-- end of userId -->
 	        <p id="idcheck"></p>
         </div>	<!-- end of userIdWrap -->
         <div class="userPwd">
             <span>비밀번호*</span>
-            <input type="password" name="tePwd" id="userPwd" placeholder="비밀번호를 입력해주세요">
+            <input type="password" name="tePwd" id="userPwd" placeholder="비밀번호(영소문자/숫자/특수문자 조합 8자리 이상)">
         </div>  <!-- end of userPwd -->
         <div class="userPwChk">
             <span>비밀번호확인*</span>
@@ -61,7 +61,7 @@
         </div>   <!-- end of userTel -->
         <div class="userTel">
             <span>전화번호*</span>
-            <input type="text" name="tePhoneNum" id="userTel" placeholder="전화번호를 입력해주세요">
+            <input type="text" name="tePhoneNum" id="userTel" placeholder="전화번호를 입력해주세요( ' - ' 제외 )">
         </div>   <!-- end of userTel -->
         <div class="userBirth">
             <span>생년월일*</span>
@@ -161,7 +161,7 @@ $(document).ready(function() {
 	
 	$("#idChkBtn").click(function() {
 		
-		if(userId.val() !== "") {
+		if(userId.val() !== "" && /^[a-zA-Z0-9]+$/.test(userId.val())) {	// id 정규식 확인(영소문자+숫자 6자리 이상 조합)
 			
 			// id 중복확인
 			$.ajax({
@@ -191,6 +191,7 @@ $(document).ready(function() {
 			});
 		}else {
 			nullFalseChk(userId);
+			alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
 		}
 	});/* end of idChkBtn */
 	
@@ -265,20 +266,20 @@ $(document).ready(function() {
 			alert("아이디 입력칸을 확인하세요")
 			nullFalseChk(userId);
 			return;
-		} else if (userPwd.val() === "" || userPwd.val().length < 0){
-			alert("비밀번호 입력칸을 확인하세요")
+		} else if (userPwd.val() === "" || !/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(userPwd.val())){
+			alert("비밀번호를 올바르게 입력해주세요")
 			nullFalseChk(userPwd);
 			return;
 		} else if (userPwdChk.val() === "" || userPwdChk.val().length < 0 || userPwdChk.val() != userPwd.val()){
 			alert("비밀번호확인 입력칸을 확인하세요")
 			nullFalseChk(userPwdChk);
 			return;
-		} else if (userName.val() === "" || userName.val().length < 0){
+		} else if (userName.val() === "" || userName.val().length < 1){
 			alert("이름 입력칸을 확인하세요")
 			nullFalseChk(userName);
 			return;
-		} else if(userEmail.val() === "" || userEmail.val().length < 0){
-			alert("이메일입력칸을 확인하세요.");
+		} else if(userEmail.val() === "" || !/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i.test(userEmail.val())){
+			alert("이메일을 올바르게 입력해주세요");
 			nullFalseChk(userEmail);
 		} else if(userMailChk.val() === "" || userMailChk.val().length < 0){
 			alert("이메일인증코드 입력칸을 확인하세요.");
